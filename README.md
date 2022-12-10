@@ -1,4 +1,4 @@
-# C++-Playpen
+# C++ Playpen
 
 A web interface for running C++ code.
 
@@ -22,14 +22,14 @@ $ docker run -d -v /var/run/docker.sock:/var/run/docker.sock -p 8080:8080 cpp-pl
 
 You should now be able to browse http://127.0.0.1:8080 and interact.
 
+If the code runner doesn't work, please check if the "docker" group in the host and one in the container have same group IDs.
+
 ## Note
 This web app can't execute users' code in parallel.
 
-Consider using a newer web app framework such as axum!
-https://github.com/tokio-rs/axum
+Consider using a newer web app framework such as [axum](https://github.com/tokio-rs/axum)!
 
 ## Caution
-The container gets access to docker.sock. It means it has more privileges over the docker daemon. So when used in real projects, understand the security risks, and use it.
+The container gets access to docker.sock, so it has more privileges over the docker daemon.
 
-Consider using Sysbox!
-https://devopscube.com/run-docker-in-docker/
+Consider using [Sysbox](https://github.com/nestybox/sysbox) for security!
