@@ -161,37 +161,37 @@
         set_result(result, "<p>Shared link: ");
         var link = document.createElement("a");
         link.href = link.textContent = playurl;
-        link.className = "shortening-link";
+        // link.className = "shortening-link";
         result.firstChild.appendChild(link);
 
 
-        var repainter = setInterval(repaintResult, 50);
-        httpRequest("GET", url, null, 200,
-                    function(response) {
-                        clearInterval(repainter);
-                        button.disabled = false;
+        // var repainter = setInterval(repaintResult, 50);
+        // httpRequest("GET", url, null, 200,
+        //             function(response) {
+        //                 clearInterval(repainter);
+        //                 button.disabled = false;
 
-                        var link = result.firstChild.firstElementChild;
-                        link.className = "";
-                        link.href = link.textContent = JSON.parse(response).shorturl;
+        //                 var link = result.firstChild.firstElementChild;
+        //                 link.className = "";
+        //                 link.href = link.textContent = JSON.parse(response).shorturl;
 
-                        repaintResult();
-                    },
-                    function(status, response) {
-                        clearInterval(repainter);
-                        button.disabled = false;
+        //                 repaintResult();
+        //             },
+        //             function(status, response) {
+        //                 clearInterval(repainter);
+        //                 button.disabled = false;
 
-                        if (request.status === 0) {
-                            set_result(result, "<p class=error>Connection failure" +
-                                "<p class=error-explanation>Are you connected to the Internet?");
-                        } else {
-                            set_result(result, "<p class=error>Something went wrong" +
-                                "<p class=error-explanation>The HTTP request produced a response with status code " + status + ".");
-                        }
+        //                 if (request.status === 0) {
+        //                     set_result(result, "<p class=error>Connection failure" +
+        //                         "<p class=error-explanation>Are you connected to the Internet?");
+        //                 } else {
+        //                     set_result(result, "<p class=error>Something went wrong" +
+        //                         "<p class=error-explanation>The HTTP request produced a response with status code " + status + ".");
+        //                 }
 
-                        repaintResult();
-                    }
-        );
+        //                 repaintResult();
+        //             }
+        // );
     }
 
     function getQueryParameters() {
