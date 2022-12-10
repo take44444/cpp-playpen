@@ -13,19 +13,18 @@ pub struct Container {
 }
 
 impl Container {
-    pub fn new(cmd: &str, args: &[String], name: &str) -> io::Result<Container> {
+    pub fn new(cmd: &str, name: &str) -> io::Result<Container> {
         let out = run(Command::new("docker")
                               .arg("create")
                               .arg("--cap-drop=ALL")
-                              .arg("--memory=32m")
+                              .arg("--memory=64m")
                               .arg("--net=none")
                               .arg("--pids-limit=5")
                               .arg("--security-opt=no-new-privileges")
                               .arg("--interactive")
                               .arg(name)
                               .arg(cmd)
-                              .stderr(Stdio::inherit())
-                              .args(args))?;
+                              .stderr(Stdio::inherit()))?;
         let stdout = String::from_utf8_lossy(&out.stdout);
         Ok(Container {
             id: stdout.trim().to_string(),
@@ -33,6 +32,7 @@ impl Container {
     }
 
     pub fn run(&self,
+               input: &[u8],
                timeout: Duration)
                -> io::Result<(ExitStatus, Vec<u8>, bool)> {
         let mut cmd = Command::new("docker");
@@ -46,8 +46,8 @@ impl Container {
         debug!("attaching with {:?}", cmd);
         let start = Instant::now();
         let mut cmd = cmd.spawn()?;
-        // cmd.stdin.take().unwrap().write_all(input)?;
-        // debug!("input written, now waiting");
+        cmd.stdin.take().unwrap().write_all(input)?;
+        debug!("input written, now waiting");
 
         let mut stdout = cmd.stdout.take().unwrap();
         let mut stderr = cmd.stderr.take().unwrap();

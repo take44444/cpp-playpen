@@ -82,10 +82,8 @@ fn evaluate(req: &mut Request) -> IronResult<Response> {
 
     let data: EvaluateReq = itry!(json::decode(&body));
 
-    let args = vec![data.code];
-
     let cache = req.extensions.get::<AddCache>().unwrap();
-    let (_status, output) = itry!(cache.exec("/usr/local/bin/evaluate.sh", args));
+    let (_status, output) = itry!(cache.exec("/usr/local/bin/evaluate.sh", data.code));
 
     let mut obj = json::Object::new();
     // {"gpp": "...", "program": "..."}

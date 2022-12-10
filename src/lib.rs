@@ -22,7 +22,7 @@ pub struct Cache {
 #[derive(PartialEq, Eq, Hash)]
 struct CacheKey {
     cmd: String,
-    args: Vec<String>,
+    input: String,
 }
 
 impl Cache {
@@ -33,11 +33,11 @@ impl Cache {
     }
 
     /// Helper method for safely invoking a command inside a playpen
-    pub fn exec(&self, cmd: &str, args: Vec<String>) -> io::Result<(ExitStatus, Vec<u8>)> {
+    pub fn exec(&self, cmd: &str, input: String) -> io::Result<(ExitStatus, Vec<u8>)> {
         // Build key to look up
         let key = CacheKey {
             cmd: cmd.to_string(),
-            args: args,
+            input: input,
         };
         let mut cache = self.cache.lock().unwrap();
         if let Some(prev) = cache.get_mut(&key) {
@@ -46,9 +46,9 @@ impl Cache {
         drop(cache);
 
         let container = "cpp-sandbox";
-        let container = Container::new(cmd, &key.args, &container)?;
+        let container = Container::new(cmd, &container)?;
 
-        let tuple = container.run(Duration::new(5, 0))?;
+        let tuple = container.run(key.input.as_bytes(), Duration::new(5, 0))?;
         let (status, mut output, timeout) = tuple;
         if timeout {
             output.extend_from_slice(b"\ntimeout triggered!");
