@@ -101,17 +101,11 @@
                     pre = document.createElement("pre");
                     pre.appendChild(samp);
                     result.appendChild(pre);
-                    if (test) {
-                        div = null;
-                    } else {
-                        div.textContent = "Program ended.";
-                    }
+                    div.textContent = "Program ended.";
                 } else {
                     div.textContent = "Compilation failed.";
                 }
-                if (div) {
-                    result.appendChild(div);
-                }
+                result.appendChild(div);
         }, button, "Running…", result);
     }
 
